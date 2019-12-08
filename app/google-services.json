@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "354942211672",
+    "firebase_url": "https://internshala-app-5926f.firebaseio.com",
+    "project_id": "internshala-app-5926f",
+    "storage_bucket": "internshala-app-5926f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:354942211672:android:76b5e34fe799dcba1bdc2d",
+        "android_client_info": {
+          "package_name": "com.example.internshalaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "354942211672-i7p5avkmql3nnu2i73u2pcd1371tl25n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.internshalaapp",
+            "certificate_hash": "06b086ad049292589ad0c3029b2a04a431f3421e"
+          }
+        },
+        {
+          "client_id": "354942211672-6d0o8hffi62dn68e8a8orl2l9ffrdgpu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1cfCAQARfe91NuWUpDJ2GHrr1oXGaUZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "354942211672-6d0o8hffi62dn68e8a8orl2l9ffrdgpu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
