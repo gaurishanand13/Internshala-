@@ -20,6 +20,15 @@ import java.lang.StringBuilder
 class workshop_activity : AppCompatActivity() , FragmentInterface
 {
     var adapter : myAdapter? = null
+    var login : String? = "no"
+    var sharedPref : SharedPreferences? = null
+
+    var workshopsRegistered  = arrayOf(
+        false,false,false,
+        false,false,false,
+        false,false,false,
+        false)
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu,menu)
         return super.onCreateOptionsMenu(menu)
@@ -36,7 +45,7 @@ class workshop_activity : AppCompatActivity() , FragmentInterface
                 sharedPref?.edit()?.putString("login","no")?.commit()
                 Toast.makeText(this,"Logout Done",Toast.LENGTH_SHORT).show()
                 login = "no"
-                for(x in 0..10)
+                for(x in 0..9)
                 {
                     workshopsRegistered[x] = false
                 }
@@ -45,54 +54,44 @@ class workshop_activity : AppCompatActivity() , FragmentInterface
         }
         return super.onOptionsItemSelected(item)
     }
-    var login : String? = "no"
-    var sharedPref : SharedPreferences? = null
-
-
-    var workshopsRegistered  = arrayOf(false,false,false,
-        false,false,false,
-        false,false,false,
-        false,false,false,
-        false,false)
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
+    }
 
     /**
-     * All the Methods of fragments are rolled here
+     * This method of fragment will update the login
      */
-    override fun updateLogin(username: String) {
+    override fun updateLogin(username: String)
+    {
+
         sharedPref?.edit()?.putString("login","yes")?.commit()
         sharedPref?.edit()?.putString("username",username)?.commit()
         login = "yes"
-    }
-
-    override fun login_done() {
         fragmentCantainer.visibility = View.GONE
-        login = "yes"
-        val username = sharedPref?.getString("username","")
         val databaseHelper = myDataBaseHelper(applicationContext)
         val db = databaseHelper.writableDatabase
         registerWorkshops.getAllWorkShops(db,username!!,workshopsRegistered)
         adapter?.notifyDataSetChanged()
-    }
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finishAffinity()
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workshop_activity)
 
+        /**
+         * First Creating the instance of the sqlite database
+         */
         val databaseHelper = myDataBaseHelper(applicationContext)
         val db = databaseHelper.writableDatabase
 
         sharedPref= getSharedPreferences("myPref",Context.MODE_PRIVATE)
         login = sharedPref!!.getString("login","no")
-        Log.i("login",login)
         if(login.equals("yes"))
         {
             val username = sharedPref?.getString("username","")
             registerWorkshops.getAllWorkShops(db,username!!,workshopsRegistered)
-            Log.i("tag",workshopsRegistered.toString())
         }
 
         workshopRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -109,8 +108,8 @@ class workshop_activity : AppCompatActivity() , FragmentInterface
             override fun update_color2(itemView: View) {
                 itemView.registerWorkshopButtonTextView.text = "REGISTER"
                 itemView.registerWorkshopButton.setCardBackgroundColor(resources.getColor(android.R.color.holo_blue_dark))
-
             }
+
 
             override fun register_workshop(position: Int, itemView: View) {
 

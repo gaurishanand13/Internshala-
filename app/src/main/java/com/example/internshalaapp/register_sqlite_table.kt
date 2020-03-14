@@ -58,7 +58,7 @@ object loginTable {
         cursor.moveToFirst()
         while(cursor.moveToNext())
         {
-            if(cursor.getString(emailCol).equals(username) && cursor.getString(passwordCol).equals(password))
+            if(( cursor.getString(emailCol).equals(username)  )&& ( cursor.getString(passwordCol).equals(password) ))
             {
                 ans = true
             }
@@ -73,19 +73,16 @@ object loginTable {
     fun search_for_email(database: SQLiteDatabase, username : String) : Boolean
     {
         var ans: Boolean = false
-
         val cursor : Cursor = database.query(TABLE_NAME,
             arrayOf("EMAIL"),
             null,null,null,null,null)
 
         val emailCol = cursor.getColumnIndex("EMAIL")
-        Log.i("tag2",username)
         cursor.moveToFirst()
         while(cursor.moveToNext())
         {
             if(cursor.getString(emailCol).equals(username))
             {
-                Log.i("tag",username)
                 ans = true
             }
         }

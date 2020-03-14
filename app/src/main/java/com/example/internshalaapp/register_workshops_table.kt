@@ -1,10 +1,8 @@
 package com.example.internshalaapp
-
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
-import java.text.FieldPosition
 
 object registerWorkshops {
 
@@ -28,7 +26,7 @@ object registerWorkshops {
             "EMAIL = ?", arrayOf(username),null,null,null)
 
         var string = ""
-        var id = 0
+        var id = -99
         val workshopsCol = cursor.getColumnIndex("WORKSHOPS")
         var idCol = cursor.getColumnIndex("ID")
         cursor.moveToFirst()
@@ -36,26 +34,26 @@ object registerWorkshops {
         while (cursor.moveToNext())
         {
             string = string + cursor.getString(workshopsCol)
+            Log.i("register workshop while",string)
             id = cursor.getInt((idCol))
         }
 
         val row = ContentValues()
         row.put("EMAIL",username)
-        row.put("WORKSHOPS",string + position)
-        Log.i("row",string + "hello")
-        val c = position.toChar()
-        if(string.equals(""))
+        row.put("WORKSHOPS",string + "${position}")
+        Log.i("register workshop while",string + "${position}")
+        if(id==-99)
         {
-            Log.i("row","reached here")
             database.insert(TABLE_NAME,null,row)
+            Log.i("register workshop while","hello")
         }
-        else if(string.contains(c))
+        else if(string.contains("${position}"))
         {
             //Then don't need to add it again
         }
         else
         {
-            database.update(TABLE_NAME,row,"ID = ?", arrayOf(id.toString()))
+            database.update(TABLE_NAME,row,"ID = ?", arrayOf("${id}"))
         }
     }
 
@@ -79,14 +77,14 @@ object registerWorkshops {
         }
         string = string.replace("${position}","")
         val row = ContentValues()
-        row .put("EMAIL",username)
+        row.put("EMAIL",username)
         row.put("WORKSHOPS",string)
-
-        database.update(TABLE_NAME,row,"ID = ?", arrayOf(id.toString()))
+        database.update(TABLE_NAME,row,"ID = ?", arrayOf("${id}"))
     }
 
-    fun getAllWorkShops(database : SQLiteDatabase, username: String, workshops : Array<Boolean>)
-    {
+
+    //This is correct
+    fun getAllWorkShops(database : SQLiteDatabase, username: String, workshops : Array<Boolean>) {
         val cursor : Cursor = database.query(TABLE_NAME,
             arrayOf("WORKSHOPS"), //Here we mention the columns for which cursor should get us data
             "EMAIL = ?", arrayOf(username),null,null,null)

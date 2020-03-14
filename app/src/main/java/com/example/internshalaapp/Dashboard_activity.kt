@@ -39,10 +39,14 @@ class Dashboard_activity : AppCompatActivity() {
             if(x==true)
             {
                 count++
+                Log.i("dashboard s", pos.toString())
                 string = string + pos
             }
             pos++
         }
+        Log.i("dashboard",workshopsRegistered.toString())
+        Log.i("dashboard",count.toString())
+        Log.i("dashboard",string + "hello")
         dashboardRecyclerView.layoutManager = LinearLayoutManager(this)
         dashboardRecyclerView.adapter = myAdapter2(string,count)
 

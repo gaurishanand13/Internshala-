@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_login.view.*
 public interface FragmentInterface
 {
     fun updateLogin(username : String)
-    fun login_done()
 }
 class loginFragment : Fragment() {
 
@@ -29,17 +28,17 @@ class loginFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
-
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         Finterface = context as FragmentInterface
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         view.buttonLogin.setOnClickListener {
-            if(view.usernameEditText.text.toString().equals("") || view.passwordEditText.text.toString().equals(""))
+            val username = view.usernameEditText.text.toString().trim()
+            val password = view.passwordEditText.text.toString().trim()
+            if(username.equals("") || password.equals(""))
             {
                 Toast.makeText(context,"Please fill username and password both", Toast.LENGTH_SHORT).show()
             }
@@ -47,12 +46,10 @@ class loginFragment : Fragment() {
             {
                 val databaseHelper = myDataBaseHelper(context!!)
                 val db = databaseHelper.writableDatabase
-                if(loginTable.search_for_login(db,view.usernameEditText.text.toString(),view.passwordEditText.text.toString()))
+                if(loginTable.search_for_login(db,username,password))
                 {
                     //First update this information in the sharedPreferences.
-                    Finterface?.updateLogin(view.usernameEditText.text.toString())
-                    //Therefore now we are logged in. Make this fragment container close. And we will update all the registered workshops
-                    Finterface?.login_done()
+                    Finterface?.updateLogin(username)
 
                 }
                 else
@@ -62,10 +59,18 @@ class loginFragment : Fragment() {
             }
         }
 
+        /**
+         * This is for the registrer button of the register ID page
+         */
         view.registerButton.setOnClickListener {
-            if(view.usernameRegisterEditText.text.toString().equals("") || view.passwordRegisterEditText.text.toString().equals("") || view.nameRegisterEditText.text.toString().equals(""))
+
+            if(view.usernameRegisterEditText.text.toString().contains(' ') || view.passwordRegisterEditText.text.toString().contains(' '))
             {
-                Toast.makeText(context,"Please fill all the fields",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"Username and password can't contain spaces ",Toast.LENGTH_SHORT).show()
+            }
+            else if(view.usernameRegisterEditText.text.toString().equals("") || view.passwordRegisterEditText.text.toString().equals("") || view.nameRegisterEditText.text.toString().equals(""))
+            {
+                Toast.makeText(context,"Please Enter all the above fields",Toast.LENGTH_SHORT).show()
             }
             else
             {
@@ -78,7 +83,6 @@ class loginFragment : Fragment() {
                         Member(null,view.usernameRegisterEditText.text.toString(),view.passwordRegisterEditText.text.toString(),view.nameRegisterEditText.text.toString())
                     )
                     Finterface?.updateLogin(view.usernameRegisterEditText.text.toString())
-                    Finterface?.login_done()
                 }
                 else
                 {
